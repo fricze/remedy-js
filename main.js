@@ -10,7 +10,9 @@ There are idents, and collections of this idents. Idents
 allow queries to be implemented simply as obj access.
 
 You make all operations on write, and then reads should be
-super-duper fast
+super-duper fast. Because you keep data once, and then you
+just create collections of idents, writes shouldn't be that
+expensive, most times
 
 Next step is to add mutations mechanisms, and make DB
 nicely observable (meaning it should inform about changes in it),
