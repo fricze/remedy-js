@@ -58,12 +58,12 @@ const query = {
     nicePets: { race: defaultRace }
 }
 
-const notFoundCollection = {
+const notFoundValues = {
     [defaults.string]: 'string that was not found',
     [defaultRace]: 'doggy dog'
 }
 
-const collectionsToData = (db, collections, notFoundCollection) => {
+const collectionsToData = (db, collections, notFoundValues) => {
     return collections.map(
         ([collection, qKeys]) => {
             const result = collection.map(item => {
@@ -86,7 +86,7 @@ const collectionsToData = (db, collections, notFoundCollection) => {
                     .reduce((acc, [q, k, qk]) => {
                         if (k) {
                             if (Array.isArray(k)) {
-                                const stepFurther = collectionsToData(db, [[k].concat([qKeys[q]])], notFoundCollection)[0]
+                                const stepFurther = collectionsToData(db, [[k].concat([qKeys[q]])], notFoundValues)[0]
 
                                 return Object.assign(acc, {[q]: stepFurther})
                             }
@@ -96,7 +96,7 @@ const collectionsToData = (db, collections, notFoundCollection) => {
 
                         if (typeof qk === 'symbol') {
                             // we're quering for single value, and we did not found it
-                            return Object.assign(acc, {[q]: notFoundCollection[qk] || qk})
+                            return Object.assign(acc, {[q]: notFoundValues[qk] || qk})
                         }
 
                         // we're quering for collection, and we did not found it
@@ -109,11 +109,11 @@ const collectionsToData = (db, collections, notFoundCollection) => {
     )
 }
 
-const doQuery = (db, query, notFoundCollection) => {
+const doQuery = (db, query, notFoundValues) => {
     const keys = Object.keys(query)
     const collections = keys.map(k => [db[k], query[k]])
 
-    return collectionsToData(db, collections, notFoundCollection)
+    return collectionsToData(db, collections, notFoundValues)
 }
 
-doQuery(db, query, notFoundCollection)
+doQuery(db, query, notFoundValues)
