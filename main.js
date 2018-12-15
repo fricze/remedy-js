@@ -1,6 +1,20 @@
 const docString = `
-I'm just having fun, trying to imitate Clojure Fulcro
-in JavaScript. It may be interesting someday
+I'm just having fun here, trying to imitate Clojure Fulcro
+in JavaScript. It may be interesting someday.
+
+Basically the idea is to have graph DB, and data-based
+query language, that allows to query it as deeply, and
+having as many joins, as you want.
+
+There are idents, and collections of this idents. Idents
+allow queries to be implemented simply as obj access.
+
+You make all operations on write, and then reads should be
+super-duper fast
+
+Next step is to add mutations mechanisms, and make DB
+nicely observable (meaning it should inform about changes in it),
+as every nice DB should be
 `
 
 const defaults = {
