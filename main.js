@@ -81,28 +81,30 @@ const collectionsToData = (db, collections, notFoundValues) => {
                     return notFound
                 }
 
-                const someShit = Object.keys(qKeys)
+                const retrievedValues = Object.keys(qKeys)
                       .map(qKey => [qKey, ret[qKey], qKeys[qKey]])
 
-                return someShit
-                    .reduce((acc, [q, k, qk]) => {
-                        if (k) {
-                            if (Array.isArray(k)) {
-                                const stepFurther = collectionsToData(db, [[k].concat([qKeys[q]])], notFoundValues)[0]
+                return retrievedValues
+                    .reduce((acc, [objKey, maybeValue, valueSym]) => {
 
-                                return Object.assign(acc, {[q]: stepFurther})
+                        if (maybeValue) {
+                            if (Array.isArray(maybeValue)) {
+                                const stepFurther = collectionsToData(
+                                    db, [[maybeValue].concat([qKeys[objKey]])], notFoundValues)[0]
+
+                                return Object.assign(acc, {[objKey]: stepFurther})
                             }
 
-                            return Object.assign(acc, {[q]: k})
+                            return Object.assign(acc, {[objKey]: maybeValue})
                         }
 
-                        if (typeof qk === 'symbol') {
+                        if (typeof valueSym === 'symbol') {
                             // we're quering for single value, and we did not found it
-                            return Object.assign(acc, {[q]: notFoundValues[qk] || qk})
+                            return Object.assign(acc, {[objKey]: notFoundValues[valueSym] || valueSym})
                         }
 
                         // we're quering for collection, and we did not found it
-                        return Object.assign(acc, {[q]: notFound})
+                        return Object.assign(acc, {[objKey]: notFound})
                     }, {})
             })
 
